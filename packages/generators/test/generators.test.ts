@@ -60,7 +60,8 @@ describe('@feathersjs/generators', () => {
                 database: 'sqlite',
                 connectionString: `${name}.sqlite`,
                 transports: ['rest', 'websockets'],
-                schema
+                schema,
+                git: false
               },
               { cwd }
             )

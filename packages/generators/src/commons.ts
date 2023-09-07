@@ -15,6 +15,7 @@ import {
 import * as ts from 'typescript'
 import prettier, { Options as PrettierOptions } from 'prettier'
 import path from 'path'
+import { spawn } from 'child_process'
 
 export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'package.json')).toString())
 
@@ -60,6 +61,10 @@ export type FeathersAppInfo = {
    * The main schema definition format
    */
   schema: 'typebox' | 'json' | false
+  /**
+   * Git instanciate with project
+   */
+  git: true | false
 }
 
 export interface AppPackageJson extends PackageJson {
@@ -320,3 +325,10 @@ export const localTemplate = (authStrategies: string[], content: string, alt = '
  */
 export const oauthTemplate = (authStrategies: string[], content: string) =>
   authStrategies.filter((s) => s !== 'local').length > 0 ? content : ''
+/**
+ * Instanciate git
+ * @returns
+ */
+export const initializeGit = () => {
+  spawn('git init')
+}

@@ -1,7 +1,13 @@
 import { sep } from 'path'
 import chalk from 'chalk'
 import { generator, prompt, runGenerators, fromFile, install, copyFiles, toFile } from '@feathershq/pinion'
-import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext, addVersions } from '../commons'
+import {
+  FeathersBaseContext,
+  FeathersAppInfo,
+  initializeBaseContext,
+  addVersions,
+  initializeGit
+} from '../commons'
 import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection'
 
 export interface AppGeneratorData extends FeathersAppInfo {
@@ -127,6 +133,13 @@ export const generate = (ctx: AppGeneratorArguments) =>
             { value: false, name: `No schema ${chalk.grey('(not recommended)')}` }
           ]
         },
+        {
+          type: 'confirm',
+          name: 'git',
+          when: !ctx.git,
+          message: 'Do you want to instanciate Git with your project ?',
+          default: true
+        },
         ...connectionPrompts(ctx)
       ])
     )
@@ -203,3 +216,8 @@ export const generate = (ctx: AppGeneratorArguments) =>
         ({ packager }) => packager
       )
     )
+    .then((ctx) => {
+      if (ctx.git) {
+        initializeGit()
+      }
+    })
